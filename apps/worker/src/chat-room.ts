@@ -985,6 +985,8 @@ export class ChatRoom extends DurableObject<Env> {
         clientMessageId: file.clientMessageId,
         parentId: file.parentId ?? null,
         alsoSent: file.alsoSend === true,
+        waveform: file.waveform ?? null,
+        duration: file.duration ?? null,
       };
       await this.blobsFor(roomId).create(blob, new Date(startedAt).toISOString());
       return { key };
@@ -1248,7 +1250,9 @@ export class ChatRoom extends DurableObject<Env> {
       }
       case "boost.delete": {
         const boost = await store.findBoost(frame.boostId);
-        if (!boost || boost.booster.id !== user.id) return this.refuse(ws, "You can only remove your own reactions");
+        // One that's gone already was removed by a repeated click, as a reaction's chip sends on a double tap.
+        if (!boost) return;
+        if (boost.booster.id !== user.id) return this.refuse(ws, "You can only remove your own reactions");
         return this.removeBoost(store, boost);
       }
       case "typing.start":
@@ -1533,7 +1537,7 @@ export class ChatRoom extends DurableObject<Env> {
    */
   private async startArriving(roomId: RoomId, uploaderId: UserId, { filename, declaredType }: Pick<ArrivingFile, "filename" | "declaredType">, startedAt: number): Promise<string> {
     const key = base36(KEY_LENGTH);
-    const blob = { id: key, uploaderId, filename, contentType: declaredType, byteSize: 0, clientMessageId: null, parentId: null, alsoSent: false };
+    const blob = { id: key, uploaderId, filename, contentType: declaredType, byteSize: 0, clientMessageId: null, parentId: null, alsoSent: false, waveform: null, duration: null };
     await this.blobsFor(roomId).create(blob, new Date(startedAt).toISOString());
     return key;
   }

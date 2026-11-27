@@ -102,13 +102,17 @@ export type {
 // And the rest of sso.ts, from "@ember/protocol/sso", which only the sign-in pages, the Single sign-on card and the Worker's single sign-on use.
 export type { SsoAccount, SsoConnection, SsoField, SsoForgotten, SsoSaved, SsoSettings, SsoSetup, SsoStatus } from "./sso.ts";
 export {
+  DURATION_REFUSED,
   FILE_NAME_NOT_KEPT,
   FILE_TOO_LARGE,
+  isDuration,
   isKeepableFileName,
   isPreviewableSize,
   isPreviewed,
   isVariable,
+  isWaveform,
   isWebImage,
+  MAX_DURATION,
   MAX_FILE_NAME_LENGTH,
   MAX_FILE_SIZE,
   MAX_FILE_TYPE_LENGTH,
@@ -120,6 +124,9 @@ export {
   uploadPartPath,
   uploadPreviewPath,
   uploadsPath,
+  WAVEFORM_LENGTH,
+  WAVEFORM_LOUDEST,
+  WAVEFORM_REFUSED,
   type NewUpload,
   type StoredFile,
   type Upload,
@@ -180,6 +187,7 @@ export {
 } from "./push.ts";
 export { TRANSLATIONS, type TranslationKey } from "./translations.ts";
 export {
+  CJK_CHARACTER,
   hasFilters,
   hasWords,
   isSearchable,
